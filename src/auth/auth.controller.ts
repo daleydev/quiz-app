@@ -26,7 +26,7 @@ export class AuthController {
         return this.usersService.createUser(email, hashedPassword);
     }
 
-    @Post('/signin')
+    @Post('/login')
     async signin(
         @Body('password') password: string,
         @Body('email') email: string,
@@ -41,8 +41,8 @@ export class AuthController {
 
         if (!isCorrect) throw new UnauthorizedException();
 
-        delete user.passwordHash;
+        const jwt = this.authService.getJwt(user.email, user.id);
 
-        return user;
+        return jwt;
     }
 }
